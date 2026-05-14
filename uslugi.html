@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Услуги — ТелеСервис</title>
+<meta name="description" content="Полный спектр услуг по ремонту, обслуживанию и наладке телекоммуникационного оборудования — ТелеСервис, Багаевский район.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--c-bg:#f7f8fa;--c-surface:#ffffff;--c-primary:#1a3a5c;--c-accent:#2563eb;--c-accent-light:#eff6ff;--c-text:#1c1c1c;--c-muted:#6b7280;--c-border:#dde1ea;--c-section:#eef0f4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--c-bg);color:var(--c-text);font-size:16px;line-height:1.7;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--c-primary);}
+.nav-logo-icon{width:36px;height:36px;background:var(--c-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.nav-logo-icon svg{width:20px;height:20px;fill:white;}
+.nav-logo-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--c-muted);font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--c-primary);}
+.nav-cta{background:var(--c-accent);color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .2s;white-space:nowrap;}
+.nav-cta:hover{opacity:.88;}
+
+/* Page Hero */
+.page-hero{background:var(--c-primary);padding:120px 2rem 60px;color:white;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:rgba(232,96,28,.15);border-radius:50%;}
+.page-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:240px;height:240px;background:rgba(255,255,255,.04);border-radius:50%;}
+.page-hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:1.5rem;}
+.breadcrumb a{color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.breadcrumb a:hover{color:white;}
+.breadcrumb span{color:rgba(255,255,255,.3);}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:600;margin-bottom:1rem;}
+.page-hero h1 em{font-style:italic;color:#5b8dee;}
+.page-hero p{color:rgba(255,255,255,.7);font-size:16px;max-width:600px;}
+
+/* Filter tabs */
+.filter-bar{background:var(--c-surface);border-bottom:1px solid var(--c-border);padding:1.25rem 2rem;position:sticky;top:68px;z-index:50;}
+.filter-inner{max-width:1200px;margin:0 auto;display:flex;gap:.75rem;flex-wrap:wrap;}
+.filter-btn{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--c-border);background:white;color:var(--c-muted);cursor:pointer;transition:all .2s;}
+.filter-btn:hover{border-color:var(--c-primary);color:var(--c-primary);}
+.filter-btn.active{background:var(--c-primary);border-color:var(--c-primary);color:white;}
+
+/* Services detailed */
+.services-section{padding:4rem 2rem;}
+.services-wrap{max-width:1200px;margin:0 auto;}
+.service-group{margin-bottom:4rem;}
+.service-group-label{display:inline-flex;align-items:center;gap:8px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:2rem;}
+.service-detail-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:20px;padding:2rem;margin-bottom:1.5rem;display:grid;grid-template-columns:80px 1fr auto;gap:2rem;align-items:start;transition:box-shadow .25s,transform .25s;}
+.service-detail-card:hover{box-shadow:0 8px 32px rgba(26,58,92,.1);transform:translateY(-3px);}
+.sdc-icon{width:72px;height:72px;background:var(--c-section);border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:2rem;flex-shrink:0;}
+.sdc-body h3{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--c-primary);margin-bottom:.5rem;}
+.sdc-body p{font-size:14px;color:var(--c-muted);margin-bottom:1rem;max-width:560px;}
+.sdc-tags{display:flex;flex-wrap:wrap;gap:.5rem;}
+.sdc-tag{font-size:12px;padding:4px 10px;background:var(--c-section);border-radius:6px;color:var(--c-text);font-weight:500;}
+.sdc-price-col{text-align:right;flex-shrink:0;}
+.sdc-price{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:600;color:var(--c-primary);}
+.sdc-price-label{font-size:12px;color:var(--c-muted);margin-top:2px;}
+.sdc-btn{display:inline-block;margin-top:1rem;background:var(--c-accent);color:white;padding:10px 20px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;transition:opacity .2s;}
+.sdc-btn:hover{opacity:.88;}
+
+/* Include list */
+.include-list{list-style:none;margin-top:.75rem;}
+.include-list li{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--c-muted);padding:4px 0;}
+.include-list li::before{content:'✓';color:#22c55e;font-weight:700;flex-shrink:0;margin-top:1px;}
+
+/* CTA banner */
+.cta-banner{background:var(--c-primary);border-radius:20px;padding:3rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;margin:0 0 4rem;}
+.cta-banner h3{font-family:'Playfair Display',serif;font-size:1.6rem;color:white;margin-bottom:.5rem;}
+.cta-banner p{color:rgba(255,255,255,.65);font-size:15px;}
+.cta-banner a{background:var(--c-accent);color:white;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;white-space:nowrap;flex-shrink:0;transition:opacity .2s;}
+.cta-banner a:hover{opacity:.88;}
+
+/* Guarantee block */
+.guarantee-section{background:var(--c-section);padding:4rem 2rem;}
+.guarantee-inner{max-width:1200px;margin:0 auto;}
+.guarantee-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.guarantee-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:16px;padding:1.75rem;text-align:center;}
+.guarantee-icon{font-size:2.5rem;margin-bottom:1rem;}
+.guarantee-card h4{font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:.5rem;}
+.guarantee-card p{font-size:13px;color:var(--c-muted);}
+
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--c-primary);margin-bottom:.75rem;}
+.section-sub{color:var(--c-muted);font-size:15px;}
+
+footer{background:#0f1c2e;color:white;padding:3.5rem 2rem 0;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1.3fr;gap:3rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.footer-logo-icon{width:34px;height:34px;background:var(--c-accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.footer-logo-icon svg{width:18px;height:18px;fill:white;}
+.footer-logo span{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:white;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:.5rem;}
+.footer-inn{font-size:12px !important;color:rgba(255,255,255,.3) !important;}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.1rem;}
+.footer-col a{display:block;color:rgba(255,255,255,.65);font-size:14px;text-decoration:none;margin-bottom:9px;transition:color .2s;}
+.footer-col a:hover{color:white;}
+.footer-contact-link{display:flex !important;align-items:flex-start;gap:6px;line-height:1.4;}
+.footer-hours{margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.07);}
+.footer-hours span{display:block;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:4px;}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:1.25rem 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:12px;color:rgba(255,255,255,.25);}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  .service-detail-card{grid-template-columns:60px 1fr;gap:1.25rem;}
+  .sdc-price-col{grid-column:1/-1;text-align:left;}
+  .nav-links{display:none;}
+  .cta-banner{flex-direction:column;text-align:center;}
+  .footer-inner{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1/-1;}.footer-bottom{justify-content:center;text-align:center;}
+}
+@media(max-width:600px){
+  .footer-inner{grid-template-columns:1fr;gap:1.5rem;}
+  .service-detail-card{grid-template-columns:1fr;}
+  .sdc-icon{width:56px;height:56px;font-size:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm3 5h12v2H6v-2zm3 5h6v2H9v-2z"/></svg></div>
+    <span class="nav-logo-name">ТелеСервис</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="o-kompanii.html">О компании</a></li>
+    <li><a href="uslugi.html" class="active">Услуги</a></li>
+    <li><a href="portfolio.html">Портфолио</a></li>
+    <li><a href="otzyvy.html">Отзывы</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Оставить заявку</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Главная</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,.8)">Услуги</span>
+    </div>
+    <h1>Все наши <em>услуги</em></h1>
+    <p>Полный цикл работ — от диагностики неисправности до ввода оборудования в эксплуатацию. Работаем с юридическими и физическими лицами.</p>
+  </div>
+</div>
+
+<div class="filter-bar">
+  <div class="filter-inner">
+    <button class="filter-btn active" onclick="filterServices('all',this)">Все услуги</button>
+    <button class="filter-btn" onclick="filterServices('network',this)">Сети</button>
+    <button class="filter-btn" onclick="filterServices('antenna',this)">Антенны</button>
+    <button class="filter-btn" onclick="filterServices('pbx',this)">АТС / Телефония</button>
+    <button class="filter-btn" onclick="filterServices('server',this)">Серверы</button>
+    <button class="filter-btn" onclick="filterServices('cctv',this)">Видеонаблюдение</button>
+    <button class="filter-btn" onclick="filterServices('cabling',this)">СКС</button>
+  </div>
+</div>
+
+<div class="services-section">
+  <div class="services-wrap">
+
+    <!-- Сетевое оборудование -->
+    <div class="service-group fade-up" data-cat="network">
+      <div class="service-group-label">🌐 Сетевое оборудование</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">🔧</div>
+        <div class="sdc-body">
+          <h3>Диагностика и ремонт</h3>
+          <p>Определение и устранение неисправностей маршрутизаторов, коммутаторов, точек доступа Wi-Fi. Аппаратный и программный ремонт.</p>
+          <ul class="include-list">
+            <li>Тестирование всех портов и интерфейсов</li>
+            <li>Обновление прошивки и конфигурации</li>
+            <li>Замена вышедших из строя компонентов</li>
+            <li>Cisco, MikroTik, Ubiquiti, TP-Link, D-Link</li>
+          </ul>
+          <div class="sdc-tags" style="margin-top:.75rem">
+            <span class="sdc-tag">Cisco</span>
+            <span class="sdc-tag">MikroTik</span>
+            <span class="sdc-tag">Ubiquiti</span>
+            <span class="sdc-tag">TP-Link</span>
+            <span class="sdc-tag">D-Link</span>
+          </div>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 800 ₽</div>
+          <div class="sdc-price-label">стоимость диагностики</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">⚙️</div>
+        <div class="sdc-body">
+          <h3>Настройка и наладка сети</h3>
+          <p>Проектирование и настройка локальных и корпоративных сетей. VLAN, VPN, QoS, маршрутизация, межсетевое экранирование.</p>
+          <ul class="include-list">
+            <li>Разработка схемы сети под задачи клиента</li>
+            <li>Настройка VLAN, VPN-туннелей</li>
+            <li>Управление полосой пропускания (QoS)</li>
+            <li>Настройка межсетевого экрана (firewall)</li>
+          </ul>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 1 500 ₽</div>
+          <div class="sdc-price-label">базовая настройка</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Антенны -->
+    <div class="service-group fade-up" data-cat="antenna">
+      <div class="service-group-label">📡 Антенные системы</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">📡</div>
+        <div class="sdc-body">
+          <h3>Монтаж и настройка антенн</h3>
+          <p>Установка направленных и ненаправленных антенн, спутниковых систем, беспроводных мостов. Выезд, замеры уровня сигнала в точках приёма.</p>
+          <ul class="include-list">
+            <li>Выбор оптимального места установки и типа антенны</li>
+            <li>Монтаж на кровле, мачтах, фасадах зданий</li>
+            <li>Настройка поляризации и азимута</li>
+            <li>Замер и протокол уровня сигнала</li>
+          </ul>
+          <div class="sdc-tags" style="margin-top:.75rem">
+            <span class="sdc-tag">MIMO</span>
+            <span class="sdc-tag">Спутник</span>
+            <span class="sdc-tag">Беспроводной мост</span>
+          </div>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 1 500 ₽</div>
+          <div class="sdc-price-label">монтаж под ключ</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">🛰️</div>
+        <div class="sdc-body">
+          <h3>Беспроводные мосты и MIMO</h3>
+          <p>Организация радиоканалов для передачи данных между объектами без прокладки кабеля. Дальность — до 50 км при прямой видимости.</p>
+          <ul class="include-list">
+            <li>Расчёт и согласование трассы</li>
+            <li>Установка оборудования Ubiquiti AirMax, MikroTik</li>
+            <li>Настройка QoS и резервного канала</li>
+          </ul>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 4 000 ₽</div>
+          <div class="sdc-price-label">монтаж и настройка</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- АТС -->
+    <div class="service-group fade-up" data-cat="pbx">
+      <div class="service-group-label">☎️ АТС и IP-телефония</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">☎️</div>
+        <div class="sdc-body">
+          <h3>Настройка офисных АТС</h3>
+          <p>Монтаж и конфигурация аналоговых и IP-АТС: Panasonic, Samsung, Asterisk (FreePBX). Подключение SIP-транков, голосовые меню (IVR), запись переговоров.</p>
+          <ul class="include-list">
+            <li>Подбор оборудования под штат и задачи</li>
+            <li>Подключение к оператору связи (SIP-транки)</li>
+            <li>Настройка голосового меню (IVR)</li>
+            <li>Интеграция с CRM (Bitrix24, AmoCRM)</li>
+            <li>Запись переговоров, статистика звонков</li>
+          </ul>
+          <div class="sdc-tags" style="margin-top:.75rem">
+            <span class="sdc-tag">Asterisk</span>
+            <span class="sdc-tag">Panasonic</span>
+            <span class="sdc-tag">Samsung</span>
+            <span class="sdc-tag">FreePBX</span>
+          </div>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 2 000 ₽</div>
+          <div class="sdc-price-label">базовая настройка</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Серверы -->
+    <div class="service-group fade-up" data-cat="server">
+      <div class="service-group-label">🖥️ Серверное оборудование</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">🖥️</div>
+        <div class="sdc-body">
+          <h3>Диагностика и ремонт серверов</h3>
+          <p>Аппаратная диагностика серверов HP, Dell, IBM. Замена дисков, ОЗУ, блоков питания, плат расширения. Настройка RAID-массивов, восстановление данных.</p>
+          <ul class="include-list">
+            <li>Полная аппаратная диагностика с отчётом</li>
+            <li>Замена компонентов (HDD/SSD, ОЗУ, БП)</li>
+            <li>Настройка RAID 0/1/5/10</li>
+            <li>Восстановление данных после сбоя</li>
+            <li>Регулярное техническое обслуживание (ТО)</li>
+          </ul>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 2 500 ₽</div>
+          <div class="sdc-price-label">диагностика + ремонт</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Видеонаблюдение -->
+    <div class="service-group fade-up" data-cat="cctv">
+      <div class="service-group-label">📹 Системы видеонаблюдения</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">📹</div>
+        <div class="sdc-body">
+          <h3>Монтаж IP-видеонаблюдения</h3>
+          <p>Проектирование и монтаж систем видеонаблюдения для офисов, складов, частных домов. Настройка удалённого доступа со смартфона.</p>
+          <ul class="include-list">
+            <li>Разработка проекта и выбор камер</li>
+            <li>Прокладка кабельных трасс</li>
+            <li>Установка и настройка регистраторов NVR/DVR</li>
+            <li>Настройка удалённого доступа (iOS / Android)</li>
+            <li>Детекция движения, отправка уведомлений</li>
+          </ul>
+          <div class="sdc-tags" style="margin-top:.75rem">
+            <span class="sdc-tag">Dahua</span>
+            <span class="sdc-tag">Hikvision</span>
+            <span class="sdc-tag">IP-камеры</span>
+          </div>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">от 1 200 ₽</div>
+          <div class="sdc-price-label">за 1 камеру</div>
+          <a href="index.html#contact" class="sdc-btn">Заказать</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- СКС -->
+    <div class="service-group fade-up" data-cat="cabling">
+      <div class="service-group-label">🔌 СКС — кабельные системы</div>
+
+      <div class="service-detail-card">
+        <div class="sdc-icon">🔌</div>
+        <div class="sdc-body">
+          <h3>Проектирование и монтаж СКС</h3>
+          <p>Полный цикл работ по структурированным кабельным системам: от проектирования и согласования до прокладки, маркировки и тестирования.</p>
+          <ul class="include-list">
+            <li>Проектирование схемы СКС</li>
+            <li>Прокладка витой пары cat5e/cat6/cat6a и оптики</li>
+            <li>Установка патч-панелей, розеток, шкафов</li>
+            <li>Маркировка всех кабелей и портов</li>
+            <li>Тестирование FLUKE и сдаточная документация</li>
+          </ul>
+        </div>
+        <div class="sdc-price-col">
+          <div class="sdc-price">договорная</div>
+          <div class="sdc-price-label">зависит от объёма</div>
+          <a href="index.html#contact" class="sdc-btn">Запросить КП</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div class="cta-banner fade-up">
+      <div>
+        <h3>Не нашли нужную услугу?</h3>
+        <p>Опишите задачу — мы подберём решение и рассчитаем стоимость индивидуально.</p>
+      </div>
+      <a href="index.html#contact">Обсудить задачу</a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Гарантии -->
+<div class="guarantee-section">
+  <div class="guarantee-inner">
+    <h2 class="section-title">Наши гарантии</h2>
+    <p class="section-sub">Мы отвечаем за результат — не только на словах</p>
+    <div class="guarantee-grid">
+      <div class="guarantee-card fade-up">
+        <div class="guarantee-icon">🛡️</div>
+        <h4>3 года гарантии</h4>
+        <p>На все выполненные монтажные и пусконаладочные работы.</p>
+      </div>
+      <div class="guarantee-card fade-up">
+        <div class="guarantee-icon">🔍</div>
+        <h4>Бесплатная диагностика</h4>
+        <p>При заказе ремонта диагностика неисправности не оплачивается.</p>
+      </div>
+      <div class="guarantee-card fade-up">
+        <div class="guarantee-icon">⏱️</div>
+        <h4>Выезд за 24 часа</h4>
+        <p>Оперативный выезд специалиста в рабочие дни по Багаевскому району.</p>
+      </div>
+      <div class="guarantee-card fade-up">
+        <div class="guarantee-icon">📄</div>
+        <h4>Акт выполненных работ</h4>
+        <p>Официальные документы для отчётности — для юрлиц и ИП.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ТелеСервис</h3>
+      <p>Профессиональный сервис по ремонту, обслуживанию и наладке телекоммуникационного оборудования. Работаем в Багаевском районе и по всей Ростовской области с 2006 года.</p>
+      <p style="margin-top:.75rem;">ОГРНИП: 306610332400018 · ИНН: 610302683973</p>
+    </div>
+    <div class="footer-col">
+      <h4>Услуги</h4>
+      <a href="uslugi.html">Сетевое оборудование</a>
+      <a href="uslugi.html">Антенные системы</a>
+      <a href="uslugi.html">АТС и телефония</a>
+      <a href="uslugi.html">Видеонаблюдение</a>
+      <a href="uslugi.html">СКС</a>
+    </div>
+    <div class="footer-col">
+      <h4>Компания</h4>
+      <a href="o-kompanii.html">О нас</a>
+      <a href="portfolio.html">Портфолио</a>
+      <a href="otzyvy.html">Отзывы</a>
+      <a href="index.html#contact">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <a href="tel:+78633082458">+7 (863) 308-24-58</a>
+      <a href="mailto:andrey.gorkovenko@gmail.com">andrey.gorkovenko@gmail.com</a>
+      <a href="#">346610, Ростовская обл.,<br>ст. Багаевская, ул. Пугачева, 9/7</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 ТелеСервис. Все права защищены.</div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.fade-up').forEach(el=>obs.observe(el));
+
+function filterServices(cat, btn){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.service-group').forEach(g=>{
+    if(cat==='all'||g.dataset.cat===cat){
+      g.style.display='block';
+    }else{
+      g.style.display='none';
+    }
+  });
+}
+</script>
+</body>
+</html>

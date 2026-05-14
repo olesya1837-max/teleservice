@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ТелеСервис — Ремонт и обслуживание телекоммуникационного оборудования</title>
+<meta name="description" content="ТелеСервис — профессиональный ремонт, обслуживание и наладка телекоммуникационного оборудования в Багаевском районе Ростовской области.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--c-bg:#f7f8fa;--c-surface:#ffffff;--c-primary:#1a3a5c;--c-accent:#2563eb;--c-accent-light:#eff6ff;--c-text:#1c1c1c;--c-muted:#6b7280;--c-border:#dde1ea;--c-section:#eef0f4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--c-bg);color:var(--c-text);font-size:16px;line-height:1.7;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--c-primary);}
+.nav-logo-icon{width:36px;height:36px;background:var(--c-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.nav-logo-icon svg{width:20px;height:20px;fill:white;}
+.nav-logo-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--c-muted);font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover{color:var(--c-primary);}
+.nav-cta{background:var(--c-accent);color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .2s;white-space:nowrap;}
+.nav-cta:hover{opacity:.88;}
+
+.hero{padding:120px 2rem 80px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center;}
+.hero-tag{display:inline-flex;align-items:center;gap:8px;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:6px 14px;border-radius:100px;margin-bottom:1.5rem;}
+.hero-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--c-accent);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.4;}}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:600;line-height:1.2;color:var(--c-primary);margin-bottom:1.25rem;}
+.hero h1 em{font-style:italic;color:var(--c-accent);}
+.hero>div>p{font-size:16px;color:var(--c-muted);margin-bottom:2rem;max-width:460px;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{background:var(--c-primary);color:white;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;transition:background .2s,transform .15s;display:inline-block;}
+.btn-primary:hover{background:#0f2540;transform:translateY(-2px);}
+.btn-outline{border:1.5px solid var(--c-border);color:var(--c-primary);padding:14px 28px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;transition:border-color .2s;background:white;display:inline-block;}
+.btn-outline:hover{border-color:var(--c-primary);}
+
+.hero-visual{position:relative;}
+.hero-card-main{background:var(--c-primary);border-radius:20px;padding:2rem;color:white;position:relative;overflow:hidden;}
+.hero-card-main::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:rgba(232,96,28,.2);border-radius:50%;}
+.hero-card-main::after{content:'';position:absolute;bottom:-40px;left:-40px;width:140px;height:140px;background:rgba(255,255,255,.05);border-radius:50%;}
+.hero-card-title{font-size:13px;letter-spacing:1px;text-transform:uppercase;opacity:.6;margin-bottom:.5rem;}
+.hero-card-main h3{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;margin-bottom:1.5rem;position:relative;z-index:1;}
+.stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem;position:relative;z-index:1;}
+.stat-item{text-align:center;}
+.stat-num{font-size:1.8rem;font-weight:600;font-family:'Playfair Display',serif;color:#fff;}
+.stat-label{font-size:11px;opacity:.6;margin-top:2px;line-height:1.3;}
+.hero-badge{position:absolute;bottom:-16px;right:24px;background:white;border-radius:12px;padding:12px 18px;box-shadow:0 4px 24px rgba(0,0,0,.12);display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;color:var(--c-primary);}
+.hero-badge-icon{width:32px;height:32px;background:#e8f4fd;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+
+.stats-bar{background:var(--c-surface);border-top:1px solid var(--c-border);border-bottom:1px solid var(--c-border);padding:2rem;}
+.stats-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+.stats-item{text-align:center;}
+.stats-item-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:600;color:var(--c-primary);}
+.stats-item-label{font-size:13px;color:var(--c-muted);margin-top:4px;}
+
+section{padding:5rem 2rem;scroll-margin-top:68px;}
+.container{max-width:1200px;margin:0 auto;}
+.section-header{text-align:center;margin-bottom:3rem;}
+.section-tag{display:inline-block;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:1rem;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--c-primary);margin-bottom:.75rem;}
+.section-sub{color:var(--c-muted);font-size:16px;max-width:560px;margin:0 auto;}
+
+.services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;}
+.service-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:16px;padding:1.75rem;transition:box-shadow .25s,transform .25s;cursor:pointer;}
+.service-card:hover{box-shadow:0 8px 32px rgba(26,58,92,.1);transform:translateY(-4px);}
+.service-icon{width:48px;height:48px;background:var(--c-section);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:1rem;}
+.service-card h3{font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:.5rem;}
+.service-card p{font-size:14px;color:var(--c-muted);line-height:1.6;}
+.price-tag{display:inline-block;margin-top:1rem;background:var(--c-accent-light);color:var(--c-accent);font-size:13px;font-weight:600;padding:4px 12px;border-radius:6px;}
+
+
+
+
+
+
+
+
+.calc-group select option{background:#1a3a5c;color:white;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.equip-card h4{font-size:15px;font-weight:600;color:var(--c-primary);margin-bottom:.25rem;}
+.equip-card p{font-size:13px;color:var(--c-muted);}
+
+#about{background:var(--c-section);}
+.about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:5rem;align-items:center;}
+.about-img-wrap{background:var(--c-primary);border-radius:20px;padding:2.5rem;color:white;position:relative;overflow:hidden;}
+.about-img-wrap::after{content:'';position:absolute;bottom:-50px;right:-50px;width:180px;height:180px;background:rgba(232,96,28,.25);border-radius:50%;}
+.about-img-wrap h3{font-family:'Playfair Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative;z-index:1;}
+.about-img-wrap>p{font-size:14px;opacity:.75;position:relative;z-index:1;margin-bottom:2rem;}
+.feature-list{list-style:none;position:relative;z-index:1;}
+.feature-list li{display:flex;align-items:flex-start;gap:10px;font-size:14px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.1);}
+.feature-list li:last-child{border:none;}
+.feature-list li::before{content:'✓';color:#7ecfb0;font-weight:700;margin-top:2px;flex-shrink:0;}
+.about-text h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,2rem);color:var(--c-primary);margin-bottom:1rem;}
+.about-text>p{color:var(--c-muted);margin-bottom:1rem;font-size:15px;}
+.about-checks{list-style:none;margin-top:1.5rem;}
+.about-checks li{display:flex;align-items:center;gap:12px;padding:10px 0;font-size:15px;color:var(--c-text);border-bottom:1px solid var(--c-border);}
+.about-checks li:last-child{border:none;}
+.check-badge{width:24px;height:24px;background:var(--c-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:700;flex-shrink:0;}
+
+#process{background:var(--c-primary);color:white;}
+#process .section-title{color:white;}
+#process .section-sub{color:rgba(255,255,255,.6);}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;}
+.step{text-align:center;padding:2rem;border:1px solid rgba(255,255,255,.1);border-radius:16px;background:rgba(255,255,255,.04);transition:background .2s;}
+.step:hover{background:rgba(255,255,255,.08);}
+.step-num{width:48px;height:48px;border:2px solid var(--c-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--c-accent);margin:0 auto 1rem;}
+.step h3{font-size:15px;font-weight:600;margin-bottom:.5rem;color:white;}
+.step p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.6;}
+
+#contact{background:var(--c-section);}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start;}
+.contact-info h2{font-family:'Playfair Display',serif;font-size:1.8rem;color:var(--c-primary);margin-bottom:1rem;}
+.contact-info>p{color:var(--c-muted);margin-bottom:2rem;}
+.contact-item{display:flex;align-items:flex-start;gap:14px;padding:14px 0;border-bottom:1px solid var(--c-border);}
+.contact-item:last-of-type{border:none;}
+.contact-icon{width:40px;height:40px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-item-label{font-size:12px;color:var(--c-muted);}
+.contact-item-value{font-size:15px;font-weight:500;color:var(--c-text);}
+.contact-form{background:var(--c-surface);border:1px solid var(--c-border);border-radius:20px;padding:2rem;}
+.contact-form h3{font-family:'Playfair Display',serif;font-size:1.3rem;color:var(--c-primary);margin-bottom:1.5rem;}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:13px;font-weight:500;color:var(--c-muted);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1px solid var(--c-border);border-radius:8px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--c-text);background:var(--c-bg);outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--c-primary);}
+.form-group input.error,.form-group select.error{border-color:#e24b4a;}
+.form-group textarea{resize:vertical;min-height:90px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-submit{width:100%;padding:14px;background:var(--c-accent);color:white;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;cursor:pointer;margin-top:.5rem;transition:opacity .2s,transform .15s;}
+.form-submit:hover{opacity:.88;transform:translateY(-1px);}
+.form-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:20px;padding:2.5rem;max-width:460px;width:90%;text-align:center;animation:modalIn .3s ease;}
+@keyframes modalIn{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-icon{font-size:3rem;margin-bottom:1rem;}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--c-primary);margin-bottom:.5rem;}
+.modal p{color:var(--c-muted);font-size:15px;margin-bottom:1rem;}
+.modal-num{font-size:13px;color:var(--c-accent);font-weight:600;margin-bottom:1.5rem;}
+.modal-close{background:var(--c-primary);color:white;border:none;padding:12px 32px;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+
+footer{background:#0f1c2e;color:white;padding:3.5rem 2rem 0;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1.3fr;gap:3rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.footer-logo-icon{width:34px;height:34px;background:var(--c-accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.footer-logo-icon svg{width:18px;height:18px;fill:white;}
+.footer-logo span{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:white;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:.5rem;}
+.footer-inn{font-size:12px !important;color:rgba(255,255,255,.3) !important;}
+.footer-contacts-mobile{display:none;}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.1rem;}
+.footer-col a{display:block;color:rgba(255,255,255,.65);font-size:14px;text-decoration:none;margin-bottom:9px;transition:color .2s;}
+.footer-col a:hover{color:white;}
+.footer-contact-link{display:flex !important;align-items:flex-start;gap:6px;line-height:1.4;}
+.footer-hours{margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.07);}
+.footer-hours span{display:block;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:4px;}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:1.25rem 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:12px;color:rgba(255,255,255,.25);}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding:100px 1.5rem 3rem;}
+  .hero-visual{display:none;}
+  .about-grid,.contact-grid{grid-template-columns:1fr;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+  .footer-brand{grid-column:1/-1;}
+  .stats-inner{grid-template-columns:repeat(2,1fr);}
+  .nav-links{display:none;}
+  
+  .footer-bottom{justify-content:center;text-align:center;}
+}
+@media(max-width:600px){
+  .footer-inner{grid-template-columns:1fr;gap:1.5rem;}
+  .form-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm3 5h12v2H6v-2zm3 5h6v2H9v-2z"/></svg></div>
+    <span class="nav-logo-name">ТелеСервис</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="o-kompanii.html">О компании</a></li>
+    <li><a href="uslugi.html">Услуги</a></li>
+    <li><a href="portfolio.html">Портфолио</a></li>
+    <li><a href="otzyvy.html">Отзывы</a></li>
+  </ul>
+  <a href="#contact" class="nav-cta">Оставить заявку</a>
+</nav>
+
+<section style="padding:0;">
+<div class="hero">
+  <div>
+    <div class="hero-tag">Ростовская область · Ст. Багаевская</div>
+    <h1>Ремонт и наладка<br><em>телекоммуникационного</em><br>оборудования</h1>
+    <p>Профессиональное обслуживание сетевого оборудования, АТС, антенных систем и серверов в Багаевском районе и по всей Ростовской области.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Оставить заявку</a>
+      <a href="uslugi.html" class="btn-outline">Наши услуги</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card-main">
+      <div class="hero-card-title">Наши показатели</div>
+      <h3>Надёжный партнёр<br>для бизнеса и дома</h3>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num counter" data-target="18">0</div><div class="stat-label">Лет на рынке</div></div>
+        <div class="stat-item"><div class="stat-num counter" data-target="500">0</div><div class="stat-label">Выполненных заявок</div></div>
+        <div class="stat-item"><div class="stat-num">98%</div><div class="stat-label">Довольных клиентов</div></div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <div class="hero-badge-icon">📞</div>
+      <div>
+        <div style="font-size:11px;color:#6b7280;font-weight:400;">Звонок бесплатно</div>
+        <div>+7 (863) 308-24-58</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stats-item fade-up"><div class="stats-item-num">24ч</div><div class="stats-item-label">Выезд на объект</div></div>
+    <div class="stats-item fade-up"><div class="stats-item-num">3 года</div><div class="stats-item-label">Гарантия на работы</div></div>
+    <div class="stats-item fade-up"><div class="stats-item-num">50+</div><div class="stats-item-label">Видов оборудования</div></div>
+    <div class="stats-item fade-up"><div class="stats-item-num">0 ₽</div><div class="stats-item-label">Диагностика при ремонте</div></div>
+  </div>
+</div>
+
+<section id="services">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">Услуги</div>
+      <h2 class="section-title">Что мы ремонтируем и обслуживаем</h2>
+      <p class="section-sub">Полный спектр работ с телекоммуникационным оборудованием — от диагностики до ввода в эксплуатацию</p>
+    </div>
+    <div class="services-grid">
+      <div class="service-card fade-up" onclick="openService('Сетевое оборудование','Диагностика, ремонт и настройка маршрутизаторов, коммутаторов, точек доступа Wi-Fi. Настройка VLAN, VPN, QoS. Работаем с оборудованием Cisco, MikroTik, Ubiquiti, TP-Link, D-Link.')">
+        <div class="service-icon">🌐</div><h3>Сетевое оборудование</h3>
+        <p>Диагностика, ремонт и настройка маршрутизаторов, коммутаторов, точек доступа Wi-Fi.</p>
+        <span class="price-tag">от 800 ₽</span>
+      </div>
+      <div class="service-card fade-up" onclick="openService('Антенные системы','Монтаж, настройка и ремонт антенн направленного и ненаправленного действия. Спутниковые системы, MIMO, беспроводные мосты. Выезд и замеры сигнала включены.')">
+        <div class="service-icon">📡</div><h3>Антенные системы</h3>
+        <p>Монтаж, настройка и ремонт антенн направленного и ненаправленного действия.</p>
+        <span class="price-tag">от 1 500 ₽</span>
+      </div>
+      <div class="service-card fade-up" onclick="openService('АТС и IP-телефония','Настройка офисных АТС (Asterisk, Panasonic, Samsung). Интеграция с CRM, запись переговоров, SIP-транки, голосовые меню. Гарантия на все работы.')">
+        <div class="service-icon">☎️</div><h3>АТС и IP-телефония</h3>
+        <p>Настройка офисных АТС. Интеграция с CRM, SIP-транки, запись переговоров.</p>
+        <span class="price-tag">от 2 000 ₽</span>
+      </div>
+      <div class="service-card fade-up" onclick="openService('Серверное оборудование','Диагностика и ремонт серверов любых производителей. Замена компонентов, настройка RAID, восстановление данных, регулярное техническое обслуживание.')">
+        <div class="service-icon">🖥️</div><h3>Серверное оборудование</h3>
+        <p>Диагностика и ремонт серверов. Замена компонентов, настройка RAID.</p>
+        <span class="price-tag">от 2 500 ₽</span>
+      </div>
+      <div class="service-card fade-up" onclick="openService('СКС','Проектирование и монтаж структурированных кабельных систем. Прокладка кабелей, установка розеток, патч-панелей, маркировка и тестирование. Составление схемы.')">
+        <div class="service-icon">🔌</div><h3>СКС</h3>
+        <p>Проектирование и монтаж структурированных кабельных систем под ключ.</p>
+        <span class="price-tag">договорная</span>
+      </div>
+      <div class="service-card fade-up" onclick="openService('Системы видеонаблюдения','Монтаж и настройка IP-видеонаблюдения. Выбор оборудования, прокладка кабелей, настройка регистраторов, удалённый доступ с телефона.')">
+        <div class="service-icon">📹</div><h3>Системы видеонаблюдения</h3>
+        <p>Монтаж и настройка IP-видеонаблюдения. Удалённый доступ с телефона.</p>
+        <span class="price-tag">от 1 200 ₽</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-img-wrap fade-up">
+        <h3>ТелеСервис</h3>
+        <p>Багаевский район, ст. Багаевская, Ростовская область</p>
+        <ul class="feature-list">
+          <li>Официальная деятельность, договор и чек</li>
+          <li>Выезд на объект в течение 24 часов</li>
+          <li>Гарантия на все виды работ до 3 лет</li>
+          <li>Обслуживание юридических лиц и ИП</li>
+          <li>Работаем с 2006 года</li>
+          <li>Бесплатная диагностика при ремонте</li>
+        </ul>
+      </div>
+      <div class="about-text fade-up">
+        <div class="section-tag" style="margin-bottom:1rem;">О компании</div>
+        <h2>Профессиональный сервис для вашего бизнеса и дома</h2>
+        <p>Мы специализируемся на ремонте, обслуживании и наладке телекоммуникационного оборудования в Багаевском районе и прилегающих территориях Ростовской области.</p>
+        <p>Наши специалисты имеют профильное образование и регулярно повышают квалификацию, что позволяет работать с оборудованием любой сложности.</p>
+        <ul class="about-checks">
+          <li><span class="check-badge">✓</span> Официальный договор на все виды работ</li>
+          <li><span class="check-badge">✓</span> Прозрачная смета до начала работ</li>
+          <li><span class="check-badge">✓</span> Только сертифицированные запчасти</li>
+          <li><span class="check-badge">✓</span> Постгарантийная поддержка клиентов</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag" style="background:rgba(232,96,28,.2);color:#5b8dee;">Как работаем</div>
+      <h2 class="section-title">Порядок работы с нами</h2>
+      <p class="section-sub">Прозрачный процесс от первого звонка до сдачи объекта</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step fade-up"><div class="step-num">01</div><h3>Заявка</h3><p>Оставьте заявку на сайте или позвоните. Опишите проблему — мы уточним детали.</p></div>
+      <div class="step fade-up"><div class="step-num">02</div><h3>Диагностика</h3><p>Выезд специалиста. Бесплатная диагностика при последующем ремонте.</p></div>
+      <div class="step fade-up"><div class="step-num">03</div><h3>Смета</h3><p>Прозрачный расчёт стоимости. Согласование до начала работ.</p></div>
+      <div class="step fade-up"><div class="step-num">04</div><h3>Выполнение</h3><p>Проведение ремонтных или монтажных работ. Тестирование оборудования.</p></div>
+      <div class="step fade-up"><div class="step-num">05</div><h3>Сдача объекта</h3><p>Акт выполненных работ. Инструктаж. Гарантийный документ.</p></div>
+    </div>
+  </div>
+</section>
+
+
+<section id="contact">
+  <div class="container">
+    <div class="section-header fade-up">
+      <div class="section-tag">Контакты</div>
+      <h2 class="section-title">Свяжитесь с нами</h2>
+      <p class="section-sub">Оставьте заявку — перезвоним в течение часа в рабочее время</p>
+    </div>
+    <div class="contact-grid">
+      <div class="contact-info fade-up">
+        <h2>Как нас найти<br>и связаться</h2>
+        <p>Работаем в Багаевском районе и по всей Ростовской области.</p>
+        <div class="contact-item"><div class="contact-icon">📍</div><div><div class="contact-item-label">Адрес</div><div class="contact-item-value">346610, Ростовская обл., ст. Багаевская,<br>ул. Пугачева, 9/7</div></div></div>
+        <div class="contact-item"><div class="contact-icon">📞</div><div><div class="contact-item-label">Телефон</div><div class="contact-item-value"><a href="tel:+78633082458" style="color:inherit;text-decoration:none;">+7 (863) 308-24-58</a></div></div></div>
+        <div class="contact-item"><div class="contact-icon">📧</div><div><div class="contact-item-label">E-mail</div><div class="contact-item-value"><a href="mailto:andrey.gorkovenko@gmail.com" style="color:inherit;text-decoration:none;">andrey.gorkovenko@gmail.com</a></div></div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div><div class="contact-item-label">Режим работы</div><div class="contact-item-value">Пн–Пт: 8:00–18:00 · Сб: 9:00–14:00</div></div></div>
+      </div>
+      <div class="contact-form fade-up">
+        <h3>Оставить заявку</h3>
+        <div class="form-row">
+          <div class="form-group"><label>Ваше имя *</label><input type="text" id="f-name" placeholder="Иван Петров"></div>
+          <div class="form-group"><label>Телефон *</label><input type="tel" id="f-phone" placeholder="+7 (863) 308-24-58" maxlength="18"></div>
+        </div>
+        <div class="form-group">
+          <label>Тип услуги *</label>
+          <select id="f-service">
+            <option value="">— Выберите тип обращения —</option>
+            <option>Ремонт сетевого оборудования</option>
+            <option>Настройка АТС / IP-телефонии</option>
+            <option>Монтаж СКС</option>
+            <option>Обслуживание антенных систем</option>
+            <option>Видеонаблюдение</option>
+            <option>Серверное оборудование</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="form-group"><label>Описание проблемы</label><textarea id="f-desc" placeholder="Кратко опишите проблему или задачу..."></textarea></div>
+        <button class="form-submit" id="submit-btn" onclick="submitForm()">Отправить заявку</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ТелеСервис</h3>
+      <p>Профессиональный сервис по ремонту, обслуживанию и наладке телекоммуникационного оборудования. Работаем в Багаевском районе и по всей Ростовской области с 2006 года.</p>
+      <p style="margin-top:.75rem;">ОГРНИП: 306610332400018 · ИНН: 610302683973</p>
+    </div>
+    <div class="footer-col">
+      <h4>Услуги</h4>
+      <a href="uslugi.html">Сетевое оборудование</a>
+      <a href="uslugi.html">Антенные системы</a>
+      <a href="uslugi.html">АТС и телефония</a>
+      <a href="uslugi.html">Видеонаблюдение</a>
+      <a href="uslugi.html">СКС</a>
+    </div>
+    <div class="footer-col">
+      <h4>Компания</h4>
+      <a href="o-kompanii.html">О нас</a>
+      <a href="portfolio.html">Портфолио</a>
+      <a href="otzyvy.html">Отзывы</a>
+      <a href="index.html#contact">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <a href="tel:+78633082458">+7 (863) 308-24-58</a>
+      <a href="mailto:andrey.gorkovenko@gmail.com">andrey.gorkovenko@gmail.com</a>
+      <a href="#">346610, Ростовская обл.,<br>ст. Багаевская, ул. Пугачева, 9/7</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 ТелеСервис. Все права защищены.</div>
+</footer>
+
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-icon" id="modal-icon">✅</div>
+    <h3 id="modal-title">Заявка принята!</h3>
+    <p id="modal-text">Мы свяжемся с вами в течение часа.</p>
+    <div class="modal-num" id="modal-num"></div>
+    <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">Хорошо</button>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// SUPABASE — вставьте свои ключи ниже
+// ══════════════════════════════════════════════
+const SUPABASE_URL = 'https://ВАШ_ПРОЕКТ.supabase.co'; // ← замените
+const SUPABASE_KEY = 'ВАШ_ANON_KEY';                   // ← замените
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Маска телефона
+document.getElementById('f-phone').addEventListener('input', function(e){
+  let v = e.target.value.replace(/\D/g,'');
+  if(v.startsWith('8')) v='7'+v.slice(1);
+  if(!v.startsWith('7')) v='7'+v;
+  v=v.slice(0,11);
+  let o='+7';
+  if(v.length>1) o+=' ('+v.slice(1,4);
+  if(v.length>=4) o+=') '+v.slice(4,7);
+  if(v.length>=7) o+='-'+v.slice(7,9);
+  if(v.length>=9) o+='-'+v.slice(9,11);
+  e.target.value=o;
+});
+
+// Форма
+async function submitForm(){
+  const name    = document.getElementById('f-name').value.trim();
+  const phone   = document.getElementById('f-phone').value.trim();
+  const service = document.getElementById('f-service').value;
+  const desc    = document.getElementById('f-desc').value.trim();
+
+  // Валидация
+  let ok = true;
+  ['f-name','f-phone','f-service'].forEach(id => document.getElementById(id).classList.remove('error'));
+  if(name.length < 2)  { document.getElementById('f-name').classList.add('error');    ok = false; }
+  if(phone.length < 16){ document.getElementById('f-phone').classList.add('error');   ok = false; }
+  if(!service)          { document.getElementById('f-service').classList.add('error'); ok = false; }
+  if(!ok) return;
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Отправляем...';
+
+  const num = 'ТС-' + Date.now().toString().slice(-6);
+
+  try {
+    const { data, error } = await db
+      .from('applications')
+      .insert([{
+        name,
+        phone,
+        service,
+        description: desc,
+        order_number: num,
+        status: 'Новая'
+      }]);
+
+    if (error) {
+      // Показываем конкретную ошибку от Supabase
+      console.error('Supabase error:', error);
+      let msg = 'Ошибка: ' + error.message;
+      if (error.code === '42501') msg = 'Ошибка прав доступа (RLS). Отключите RLS для таблицы applications в Supabase.';
+      if (error.message && error.message.includes('Failed to fetch')) msg = 'Не удалось подключиться к базе данных. Проверьте правильность SUPABASE_URL и SUPABASE_KEY.';
+      showModal('❌', 'Не удалось отправить заявку', msg, '');
+      btn.disabled = false;
+      btn.textContent = 'Отправить заявку';
+      return;
+    }
+
+    // Успех — очищаем форму и показываем модалку
+    document.getElementById('f-name').value    = '';
+    document.getElementById('f-phone').value   = '';
+    document.getElementById('f-service').value = '';
+    document.getElementById('f-desc').value    = '';
+    showModal('✅', 'Заявка принята!', 'Мы перезвоним вам в течение часа в рабочее время.', 'Номер заявки: ' + num);
+
+  } catch(e) {
+    console.error('Unexpected error:', e);
+    showModal('❌', 'Ошибка соединения', 'Проверьте подключение к интернету и правильность ключей Supabase.', '');
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Отправить заявку';
+}
+
+function showModal(icon,title,text,num=''){
+  document.getElementById('modal-icon').textContent=icon;
+  document.getElementById('modal-title').textContent=title;
+  document.getElementById('modal-text').textContent=text;
+  document.getElementById('modal-num').textContent=num;
+  document.getElementById('modal-overlay').classList.add('open');
+
+function closeModal(e){if(e.target===document.getElementById('modal-overlay')) document.getElementById('modal-overlay').classList.remove('open');}
+function openService(title,text){showModal('🔧',title,text);}
+
+  const from=Math.round(prices[s]*b/100)*100;
+  const to=Math.round(from*1.8/100)*100;
+  el.textContent='от '+from.toLocaleString('ru')+' ₽ до '+to.toLocaleString('ru')+' ₽';
+}
+
+// Счётчики
+function animateCounter(el){
+  const t=parseInt(el.dataset.target);
+  let c=0,step=Math.ceil(t/60);
+  const tm=setInterval(()=>{c=Math.min(c+step,t);el.textContent=c+(t>=100?'+':'');if(c>=t)clearInterval(tm);},25);
+}
+
+// Scroll-анимации
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      e.target.querySelectorAll('.counter').forEach(animateCounter);
+      if(e.target.classList.contains('counter')) animateCounter(e.target);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.15});
+document.querySelectorAll('.fade-up,.counter').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>

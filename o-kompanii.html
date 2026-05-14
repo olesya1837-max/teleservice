@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>О компании — ТелеСервис</title>
+<meta name="description" content="О компании ТелеСервис — ИП Горьковенко Андрей Павлович. Ремонт и обслуживание телекоммуникационного оборудования в Ростовской области.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--c-bg:#f7f8fa;--c-surface:#ffffff;--c-primary:#1a3a5c;--c-accent:#2563eb;--c-accent-light:#eff6ff;--c-text:#1c1c1c;--c-muted:#6b7280;--c-border:#dde1ea;--c-section:#eef0f4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--c-bg);color:var(--c-text);font-size:16px;line-height:1.7;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--c-primary);}
+.nav-logo-icon{width:36px;height:36px;background:var(--c-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.nav-logo-icon svg{width:20px;height:20px;fill:white;}
+.nav-logo-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--c-muted);font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--c-primary);}
+.nav-cta{background:var(--c-accent);color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .2s;white-space:nowrap;}
+.nav-cta:hover{opacity:.88;}
+
+.page-hero{background:var(--c-primary);padding:120px 2rem 70px;color:white;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:rgba(232,96,28,.15);border-radius:50%;}
+.page-hero::after{content:'';position:absolute;bottom:-60px;left:30%;width:200px;height:200px;background:rgba(255,255,255,.04);border-radius:50%;}
+.page-hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:1.5rem;}
+.breadcrumb a{color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.breadcrumb a:hover{color:white;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:600;margin-bottom:1rem;}
+.page-hero h1 em{font-style:italic;color:#5b8dee;}
+.page-hero p{color:rgba(255,255,255,.7);font-size:16px;max-width:600px;}
+
+/* Stats ribbon */
+.stats-ribbon{background:var(--c-surface);border-bottom:1px solid var(--c-border);padding:2rem;}
+.stats-ribbon-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;}
+.sr-item{text-align:center;}
+.sr-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--c-primary);}
+.sr-label{font-size:13px;color:var(--c-muted);margin-top:4px;}
+
+/* Story */
+.story-section{padding:5rem 2rem;}
+.story-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.story-visual{background:var(--c-primary);border-radius:24px;padding:2.5rem;color:white;position:relative;overflow:hidden;}
+.story-visual::after{content:'';position:absolute;bottom:-60px;right:-60px;width:200px;height:200px;background:rgba(232,96,28,.2);border-radius:50%;}
+.story-visual h3{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.5rem;position:relative;z-index:1;}
+.story-visual > p{font-size:14px;opacity:.65;margin-bottom:2rem;position:relative;z-index:1;}
+.timeline{list-style:none;position:relative;z-index:1;}
+.timeline li{display:flex;gap:1rem;padding:1rem 0;border-bottom:1px solid rgba(255,255,255,.08);}
+.timeline li:last-child{border:none;}
+.tl-year{font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600;color:var(--c-accent);min-width:50px;}
+.tl-text{font-size:13px;opacity:.75;line-height:1.6;}
+.story-text h2{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,2.5vw,2rem);color:var(--c-primary);margin-bottom:1.25rem;}
+.story-text p{color:var(--c-muted);font-size:15px;margin-bottom:1rem;line-height:1.8;}
+.story-text strong{color:var(--c-text);}
+
+/* Values */
+.values-section{background:var(--c-section);padding:5rem 2rem;}
+.values-inner{max-width:1200px;margin:0 auto;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--c-primary);margin-bottom:.75rem;}
+.section-sub{color:var(--c-muted);font-size:15px;max-width:560px;}
+.section-tag{display:inline-block;background:var(--c-accent-light);color:var(--c-accent);font-size:12px;font-weight:600;letter-spacing:.8px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:1rem;}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.value-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:16px;padding:2rem;position:relative;overflow:hidden;transition:transform .2s,box-shadow .2s;}
+.value-card:hover{transform:translateY(-4px);box-shadow:0 8px 28px rgba(26,58,92,.1);}
+.value-card::before{content:attr(data-num);position:absolute;top:-10px;right:1rem;font-family:'Playfair Display',serif;font-size:5rem;font-weight:600;color:var(--c-primary);opacity:.05;line-height:1;}
+.value-icon{font-size:2rem;margin-bottom:1rem;}
+.value-card h4{font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:.5rem;}
+.value-card p{font-size:14px;color:var(--c-muted);line-height:1.6;}
+
+/* Team */
+.team-section{padding:5rem 2rem;}
+.team-inner{max-width:1200px;margin:0 auto;}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.team-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:20px;padding:2rem;text-align:center;transition:transform .2s;}
+.team-card:hover{transform:translateY(-4px);}
+.team-avatar{width:80px;height:80px;border-radius:50%;background:var(--c-primary);color:white;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:600;margin:0 auto 1rem;}
+.team-card h4{font-size:16px;font-weight:600;color:var(--c-primary);margin-bottom:.25rem;}
+.team-card .role{font-size:13px;color:var(--c-accent);font-weight:600;margin-bottom:.75rem;}
+.team-card p{font-size:13px;color:var(--c-muted);line-height:1.6;}
+.team-badge{display:inline-flex;align-items:center;gap:6px;background:var(--c-accent-light);color:var(--c-accent);font-size:11px;font-weight:600;padding:3px 10px;border-radius:100px;margin-top:.75rem;}
+
+/* Licenses */
+.licenses-section{background:var(--c-primary);padding:5rem 2rem;color:white;}
+.licenses-inner{max-width:1200px;margin:0 auto;}
+.licenses-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.license-card{border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:1.75rem;background:rgba(255,255,255,.05);transition:background .2s;}
+.license-card:hover{background:rgba(255,255,255,.09);}
+.license-icon{font-size:1.8rem;margin-bottom:.75rem;}
+.license-card h4{font-size:15px;font-weight:600;color:white;margin-bottom:.4rem;}
+.license-card p{font-size:13px;color:rgba(255,255,255,.55);line-height:1.5;}
+
+/* CTA */
+.cta-section{padding:5rem 2rem;background:var(--c-section);}
+.cta-inner{max-width:760px;margin:0 auto;text-align:center;}
+.cta-inner h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:var(--c-primary);margin-bottom:1rem;}
+.cta-inner p{color:var(--c-muted);margin-bottom:2rem;}
+.btn-primary{background:var(--c-primary);color:white;padding:14px 32px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;display:inline-block;transition:background .2s,transform .15s;}
+.btn-primary:hover{background:#0f2540;transform:translateY(-2px);}
+
+footer{background:#0f1c2e;color:white;padding:3.5rem 2rem 0;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2.2fr 1fr 1fr 1.3fr;gap:3rem;padding-bottom:2.5rem;border-bottom:1px solid rgba(255,255,255,.08);}
+.footer-logo{display:flex;align-items:center;gap:10px;margin-bottom:1rem;}
+.footer-logo-icon{width:34px;height:34px;background:var(--c-accent);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.footer-logo-icon svg{width:18px;height:18px;fill:white;}
+.footer-logo span{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;color:white;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.45);line-height:1.75;margin-bottom:.5rem;}
+.footer-inn{font-size:12px !important;color:rgba(255,255,255,.3) !important;}
+.footer-col h4{font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-bottom:1.1rem;}
+.footer-col a{display:block;color:rgba(255,255,255,.65);font-size:14px;text-decoration:none;margin-bottom:9px;transition:color .2s;}
+.footer-col a:hover{color:white;}
+.footer-contact-link{display:flex !important;align-items:flex-start;gap:6px;line-height:1.4;}
+.footer-hours{margin-top:1.25rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,.07);}
+.footer-hours span{display:block;font-size:13px;color:rgba(255,255,255,.4);margin-bottom:4px;}
+.footer-bottom{max-width:1200px;margin:0 auto;padding:1.25rem 0;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;font-size:12px;color:rgba(255,255,255,.25);}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+.counter-el{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:600;color:var(--c-primary);}
+
+@media(max-width:900px){
+  .story-inner{grid-template-columns:1fr;}
+  .stats-ribbon-inner{grid-template-columns:repeat(2,1fr);}
+  .nav-links{display:none;}
+  .footer-inner{grid-template-columns:1fr 1fr;}.footer-brand{grid-column:1/-1;}.footer-bottom{justify-content:center;text-align:center;}
+}
+@media(max-width:600px){
+  .footer-inner{grid-template-columns:1fr;gap:1.5rem;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm3 5h12v2H6v-2zm3 5h6v2H9v-2z"/></svg></div>
+    <span class="nav-logo-name">ТелеСервис</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="o-kompanii.html" class="active">О компании</a></li>
+    <li><a href="uslugi.html">Услуги</a></li>
+    <li><a href="portfolio.html">Портфолио</a></li>
+    <li><a href="otzyvy.html">Отзывы</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Оставить заявку</a>
+</nav>
+
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Главная</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,.8)">О компании</span>
+    </div>
+    <h1>О компании <em>ТелеСервис</em></h1>
+    <p>18 лет в телекоммуникационной отрасли Ростовской области. Сервис, которому доверяет бизнес и частные клиенты Багаевского района.</p>
+  </div>
+</div>
+
+<div class="stats-ribbon">
+  <div class="stats-ribbon-inner">
+    <div class="sr-item fade-up"><div class="sr-num counter-el" data-target="18">0</div><div class="sr-label">Лет на рынке</div></div>
+    <div class="sr-item fade-up"><div class="sr-num counter-el" data-target="500">0</div><div class="sr-label">Выполненных заявок</div></div>
+    <div class="sr-item fade-up"><div class="sr-num counter-el" data-target="120">0</div><div class="sr-label">Постоянных клиентов</div></div>
+    <div class="sr-item fade-up"><div class="sr-num">98%</div><div class="sr-label">Довольных клиентов</div></div>
+  </div>
+</div>
+
+<!-- История -->
+<div class="story-section">
+  <div class="story-inner">
+    <div class="story-visual fade-up">
+      <h3>История компании</h3>
+      <p>С первого заказа до лидера района</p>
+      <ul class="timeline">
+        <li>
+          <span class="tl-year">2007</span>
+          <span class="tl-text">Основание ИП Горьковенко А.П. Первые заказы по настройке сетевого оборудования для местных предприятий.</span>
+        </li>
+        <li>
+          <span class="tl-year">2011</span>
+          <span class="tl-text">Расширение спектра услуг: добавлены монтаж антенных систем и обслуживание АТС.</span>
+        </li>
+        <li>
+          <span class="tl-year">2015</span>
+          <span class="tl-text">Подключение к работе с юридическими лицами. Первые крупные корпоративные объекты в Ростовской области.</span>
+        </li>
+        <li>
+          <span class="tl-year">2019</span>
+          <span class="tl-text">Запуск услуги монтажа СКС и систем видеонаблюдения. 300-я выполненная заявка.</span>
+        </li>
+        <li>
+          <span class="tl-year">2025</span>
+          <span class="tl-text">Запуск информационного портала. Более 500 успешных проектов по всей Ростовской области.</span>
+        </li>
+      </ul>
+    </div>
+    <div class="story-text fade-up">
+      <h2>Надёжный партнёр для вашего бизнеса</h2>
+      <p><strong>ИП Горьковенко Андрей Павлович</strong> — индивидуальный предприниматель, работающий в сфере телекоммуникаций с 2007 года. За это время сформировалась репутация специалиста, которому доверяют как небольшие фермерские хозяйства, так и крупные коммерческие предприятия района.</p>
+      <p>Мы специализируемся на ремонте, обслуживании и наладке телекоммуникационного оборудования: от домашних роутеров до корпоративных серверных комплексов. Работаем на выезде по всему Багаевскому району и соседним территориям Ростовской области.</p>
+      <p>Каждый проект — это индивидуальный подход. Мы не предлагаем «коробочные» решения: сначала анализируем задачу клиента, затем подбираем оборудование и схему работы, которые реально решают проблему.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Ценности -->
+<div class="values-section">
+  <div class="values-inner">
+    <div class="section-header fade-up" style="margin-bottom:0">
+      <div class="section-tag">Наши принципы</div>
+      <h2 class="section-title">Почему нам доверяют</h2>
+      <p class="section-sub">Принципы, которые лежат в основе каждого нашего заказа</p>
+    </div>
+    <div class="values-grid">
+      <div class="value-card fade-up" data-num="01">
+        <div class="value-icon">🎯</div>
+        <h4>Честная диагностика</h4>
+        <p>Мы называем реальную причину неисправности и предлагаем решение, а не самый дорогой способ её устранения.</p>
+      </div>
+      <div class="value-card fade-up" data-num="02">
+        <div class="value-icon">⏰</div>
+        <h4>Точность сроков</h4>
+        <p>Если договорились на 14:00 — специалист будет в 14:00. Уважаем время клиента и своё.</p>
+      </div>
+      <div class="value-card fade-up" data-num="03">
+        <div class="value-icon">📋</div>
+        <h4>Прозрачная смета</h4>
+        <p>Цена фиксируется до начала работ. Никаких доплат «по факту» — только согласованная стоимость.</p>
+      </div>
+      <div class="value-card fade-up" data-num="04">
+        <div class="value-icon">🛡️</div>
+        <h4>Гарантия на работы</h4>
+        <p>Три года гарантии на монтаж. Если в гарантийный период возникнет проблема — устраним бесплатно.</p>
+      </div>
+      <div class="value-card fade-up" data-num="05">
+        <div class="value-icon">📞</div>
+        <h4>Обратная связь</h4>
+        <p>Берём трубку, отвечаем на вопросы и консультируем — даже после завершения работ.</p>
+      </div>
+      <div class="value-card fade-up" data-num="06">
+        <div class="value-icon">🌿</div>
+        <h4>Местный бизнес</h4>
+        <p>Мы живём и работаем здесь, в ст. Багаевской. Наша репутация — это доверие соседей и соседних предприятий.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Специалисты -->
+<div class="team-section">
+  <div class="team-inner">
+    <div class="section-header fade-up" style="text-align:center;margin-bottom:2.5rem">
+      <div class="section-tag">Команда</div>
+      <h2 class="section-title">Наши специалисты</h2>
+      <p class="section-sub" style="margin:0 auto">Опытные инженеры с практикой от 7 лет</p>
+    </div>
+    <div class="team-grid">
+      <div class="team-card fade-up">
+        <div class="team-avatar">АГ</div>
+        <h4>Горьковенко Андрей Павлович</h4>
+        <div class="role">Руководитель, ведущий инженер</div>
+        <p>18 лет в телекоммуникационной отрасли. Специализация: сетевая инфраструктура, серверное оборудование, IP-телефония.</p>
+        <div class="team-badge">🏅 18 лет опыта</div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="team-avatar">СМ</div>
+        <h4>Степан Михайлов</h4>
+        <div class="role">Инженер по монтажу и СКС</div>
+        <p>Специализация: структурированные кабельные системы, монтаж видеонаблюдения, антенные системы.</p>
+        <div class="team-badge">🏅 9 лет опыта</div>
+      </div>
+      <div class="team-card fade-up">
+        <div class="team-avatar">ОК</div>
+        <h4>Олег Карпенко</h4>
+        <div class="role">Инженер по сетям и безопасности</div>
+        <p>Специализация: настройка сетевого оборудования, VPN, firewall, беспроводные сети корпоративного класса.</p>
+        <div class="team-badge">🏅 7 лет опыта</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Лицензии -->
+<div class="licenses-section">
+  <div class="licenses-inner">
+    <div class="fade-up" style="margin-bottom:2.5rem">
+      <div style="display:inline-block;background:rgba(232,96,28,.2);color:#5b8dee;font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:5px 14px;border-radius:100px;margin-bottom:1rem;">Документы</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:clamp(1.6rem,3vw,2.2rem);color:white;margin-bottom:.5rem;">Лицензии и сертификаты</h2>
+      <p style="color:rgba(255,255,255,.6);font-size:15px;">Работаем официально — все необходимые документы в наличии</p>
+    </div>
+    <div class="licenses-grid">
+      <div class="license-card fade-up">
+        <div class="license-icon">📋</div>
+        <h4>ИП зарегистрировано</h4>
+        <p>ОГРНИП · ИФНС Ростовской области · Официальная деятельность с 2007 года</p>
+      </div>
+      <div class="license-card fade-up">
+        <div class="license-icon">🔒</div>
+        <h4>Согласование Роскомнадзора</h4>
+        <p>Уведомление об операторе персональных данных зарегистрировано</p>
+      </div>
+      <div class="license-card fade-up">
+        <div class="license-icon">🏆</div>
+        <h4>Сертификат MikroTik MTCNA</h4>
+        <p>Инженер-сетевик, сертифицированный производителем оборудования</p>
+      </div>
+      <div class="license-card fade-up">
+        <div class="license-icon">📄</div>
+        <h4>Работаем с НДС и без</h4>
+        <p>Выставляем закрывающие документы: акт, счёт, договор — для юридических лиц и ИП</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="cta-inner fade-up">
+    <h2>Готовы обсудить вашу задачу?</h2>
+    <p>Оставьте заявку — специалист свяжется с вами в течение часа в рабочее время.</p>
+    <a href="index.html#contact" class="btn-primary">Оставить заявку</a>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ТелеСервис</h3>
+      <p>Профессиональный сервис по ремонту, обслуживанию и наладке телекоммуникационного оборудования. Работаем в Багаевском районе и по всей Ростовской области с 2006 года.</p>
+      <p style="margin-top:.75rem;">ОГРНИП: 306610332400018 · ИНН: 610302683973</p>
+    </div>
+    <div class="footer-col">
+      <h4>Услуги</h4>
+      <a href="uslugi.html">Сетевое оборудование</a>
+      <a href="uslugi.html">Антенные системы</a>
+      <a href="uslugi.html">АТС и телефония</a>
+      <a href="uslugi.html">Видеонаблюдение</a>
+      <a href="uslugi.html">СКС</a>
+    </div>
+    <div class="footer-col">
+      <h4>Компания</h4>
+      <a href="o-kompanii.html">О нас</a>
+      <a href="portfolio.html">Портфолио</a>
+      <a href="otzyvy.html">Отзывы</a>
+      <a href="index.html#contact">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <a href="tel:+78633082458">+7 (863) 308-24-58</a>
+      <a href="mailto:andrey.gorkovenko@gmail.com">andrey.gorkovenko@gmail.com</a>
+      <a href="#">346610, Ростовская обл.,<br>ст. Багаевская, ул. Пугачева, 9/7</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 ТелеСервис. Все права защищены.</div>
+</footer>
+
+<script>
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');e.target.querySelectorAll('.counter-el').forEach(animateCounter);if(e.target.classList.contains('counter-el')) animateCounter(e.target);obs.unobserve(e.target);}});},{threshold:.1});
+document.querySelectorAll('.fade-up,.counter-el').forEach(el=>obs.observe(el));
+
+function animateCounter(el){
+  const t=parseInt(el.dataset.target);if(!t)return;
+  let c=0,step=Math.ceil(t/60);
+  const tm=setInterval(()=>{c=Math.min(c+step,t);el.textContent=c+(t>=100?'+':'');if(c>=t)clearInterval(tm);},25);
+}
+</script>
+</body>
+</html>

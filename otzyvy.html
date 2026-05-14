@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Отзывы клиентов — ТелеСервис</title>
+<meta name="description" content="Отзывы клиентов о работе ТелеСервис — ремонт и обслуживание телекоммуникационного оборудования в Багаевском районе.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--c-bg:#f7f8fa;--c-surface:#ffffff;--c-primary:#1a3a5c;--c-accent:#2563eb;--c-accent-light:#eff6ff;--c-text:#1c1c1c;--c-muted:#6b7280;--c-border:#dde1ea;--c-section:#eef0f4;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Manrope',sans-serif;background:var(--c-bg);color:var(--c-text);font-size:16px;line-height:1.7;}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.96);backdrop-filter:blur(10px);border-bottom:1px solid var(--c-border);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;}
+.nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--c-primary);}
+.nav-logo-icon{width:36px;height:36px;background:var(--c-primary);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.nav-logo-icon svg{width:20px;height:20px;fill:white;}
+.nav-logo-name{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;}
+.nav-links{display:flex;gap:1.75rem;list-style:none;}
+.nav-links a{text-decoration:none;color:var(--c-muted);font-size:14px;font-weight:500;transition:color .2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--c-primary);}
+.nav-cta{background:var(--c-accent);color:white;padding:10px 22px;border-radius:8px;font-size:14px;font-weight:600;text-decoration:none;transition:opacity .2s;white-space:nowrap;}
+.nav-cta:hover{opacity:.88;}
+
+/* PAGE HERO */
+.page-hero{background:var(--c-primary);padding:120px 2rem 60px;color:white;position:relative;overflow:hidden;}
+.page-hero::before{content:'';position:absolute;top:-80px;right:-80px;width:320px;height:320px;background:rgba(232,96,28,.15);border-radius:50%;}
+.page-hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:220px;height:220px;background:rgba(255,255,255,.04);border-radius:50%;}
+.page-hero-inner{max-width:1200px;margin:0 auto;position:relative;z-index:1;}
+.breadcrumb{display:flex;align-items:center;gap:8px;font-size:13px;color:rgba(255,255,255,.5);margin-bottom:1.5rem;}
+.breadcrumb a{color:rgba(255,255,255,.5);text-decoration:none;transition:color .2s;}
+.breadcrumb a:hover{color:white;}
+.page-hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,2.8rem);font-weight:600;margin-bottom:1rem;}
+.page-hero p{font-size:16px;color:rgba(255,255,255,.7);max-width:560px;}
+
+/* RATING SUMMARY */
+.rating-bar{background:var(--c-surface);border-bottom:1px solid var(--c-border);padding:2rem;}
+.rating-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:auto 1fr auto;gap:3rem;align-items:center;}
+.rating-big{text-align:center;}
+.rating-num{font-family:'Playfair Display',serif;font-size:4rem;font-weight:600;color:var(--c-primary);line-height:1;}
+.rating-stars-big{color:#f59e0b;font-size:1.5rem;letter-spacing:4px;margin:.5rem 0;}
+.rating-count{font-size:13px;color:var(--c-muted);}
+.rating-bars{display:flex;flex-direction:column;gap:.6rem;}
+.rating-bar-row{display:flex;align-items:center;gap:12px;font-size:13px;color:var(--c-muted);}
+.rating-bar-track{flex:1;height:8px;background:var(--c-border);border-radius:100px;overflow:hidden;}
+.rating-bar-fill{height:100%;background:#f59e0b;border-radius:100px;transition:width 1s ease;}
+.rating-bar-row span:last-child{width:30px;text-align:right;color:var(--c-text);font-weight:500;}
+.rating-cta{text-align:center;}
+.rating-cta p{font-size:14px;color:var(--c-muted);margin-bottom:1rem;}
+.btn-primary{background:var(--c-primary);color:white;padding:14px 28px;border-radius:10px;font-size:15px;font-weight:600;text-decoration:none;display:inline-block;transition:background .2s,transform .15s;}
+.btn-primary:hover{background:#0f2540;transform:translateY(-2px);}
+.btn-accent{background:var(--c-accent);color:white;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;text-decoration:none;display:inline-block;transition:opacity .2s;}
+.btn-accent:hover{opacity:.88;}
+
+/* FILTER */
+.filter-bar{padding:2rem 2rem 0;max-width:1200px;margin:0 auto;display:flex;gap:.75rem;flex-wrap:wrap;}
+.filter-btn{padding:8px 18px;border-radius:100px;font-size:13px;font-weight:600;border:1.5px solid var(--c-border);background:white;color:var(--c-muted);cursor:pointer;transition:all .2s;}
+.filter-btn.active,.filter-btn:hover{background:var(--c-primary);color:white;border-color:var(--c-primary);}
+
+/* REVIEWS */
+section{padding:3rem 2rem 5rem;}
+.container{max-width:1200px;margin:0 auto;}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:1.5rem;}
+.review-card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:16px;padding:1.75rem;transition:transform .2s,box-shadow .2s;}
+.review-card:hover{transform:translateY(-3px);box-shadow:0 8px 32px rgba(26,58,92,.08);}
+.review-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;}
+.review-stars{color:#f59e0b;font-size:15px;letter-spacing:2px;}
+.review-category{font-size:11px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;background:var(--c-accent-light);color:var(--c-accent);padding:3px 10px;border-radius:100px;}
+.review-text{font-size:14px;color:var(--c-text);line-height:1.75;margin-bottom:1.25rem;font-style:italic;}
+.review-author{display:flex;align-items:center;gap:12px;padding-top:1rem;border-top:1px solid var(--c-border);}
+.review-avatar{width:40px;height:40px;border-radius:50%;background:var(--c-primary);color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:600;flex-shrink:0;}
+.review-name{font-size:14px;font-weight:600;color:var(--c-primary);}
+.review-meta{font-size:12px;color:var(--c-muted);}
+
+/* WRITE REVIEW FORM */
+.write-section{background:var(--c-section);padding:5rem 2rem;}
+.write-box{max-width:700px;margin:0 auto;background:var(--c-surface);border:1px solid var(--c-border);border-radius:20px;padding:2.5rem;}
+.write-box h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--c-primary);margin-bottom:.5rem;}
+.write-box>p{color:var(--c-muted);font-size:14px;margin-bottom:2rem;}
+.form-group{margin-bottom:1rem;}
+.form-group label{display:block;font-size:13px;font-weight:500;color:var(--c-muted);margin-bottom:6px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1px solid var(--c-border);border-radius:8px;font-family:'Manrope',sans-serif;font-size:14px;color:var(--c-text);background:var(--c-bg);outline:none;transition:border-color .2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--c-primary);}
+.form-group input.error,.form-group select.error,.form-group textarea.error{border-color:#e24b4a;}
+.form-group textarea{resize:vertical;min-height:110px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.star-select{display:flex;gap:6px;margin-bottom:1.5rem;}
+.star-btn{font-size:1.8rem;cursor:pointer;color:var(--c-border);transition:color .15s;}
+.star-btn.active{color:#f59e0b;}
+.form-submit{width:100%;padding:14px;background:var(--c-accent);color:white;border:none;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;cursor:pointer;transition:opacity .2s,transform .15s;}
+.form-submit:hover{opacity:.88;transform:translateY(-1px);}
+.form-submit:disabled{opacity:.6;cursor:not-allowed;transform:none;}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:white;border-radius:20px;padding:2.5rem;max-width:460px;width:90%;text-align:center;animation:modalIn .3s ease;}
+@keyframes modalIn{from{transform:scale(.9);opacity:0;}to{transform:scale(1);opacity:1;}}
+.modal-icon{font-size:3rem;margin-bottom:1rem;}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--c-primary);margin-bottom:.5rem;}
+.modal p{color:var(--c-muted);font-size:15px;margin-bottom:1.5rem;}
+.modal-close{background:var(--c-primary);color:white;border:none;padding:12px 32px;border-radius:10px;font-family:'Manrope',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+
+/* FOOTER */
+footer{background:#0f1c2e;color:white;padding:3rem 2rem 2rem;}
+.footer-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:2rem;}
+.footer-brand h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.75rem;}
+.footer-brand p{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7;}
+.footer-col h4{font-size:13px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:1rem;}
+.footer-col a{display:block;color:rgba(255,255,255,.75);font-size:14px;text-decoration:none;margin-bottom:8px;transition:color .2s;}
+.footer-col a:hover{color:white;}
+.footer-bottom{max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,.08);padding-top:1.5rem;text-align:center;font-size:13px;color:rgba(255,255,255,.35);}
+
+.fade-up{opacity:0;transform:translateY(28px);transition:opacity .6s ease,transform .6s ease;}
+.fade-up.visible{opacity:1;transform:translateY(0);}
+
+@media(max-width:900px){
+  .rating-inner{grid-template-columns:1fr;gap:2rem;}
+  .rating-cta{text-align:left;}
+  .nav-links{display:none;}
+  .footer-inner{grid-template-columns:1fr 1fr;}
+}
+@media(max-width:600px){
+  .footer-inner{grid-template-columns:1fr;gap:1.5rem;}
+  .form-row{grid-template-columns:1fr;}
+  .reviews-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <div class="nav-logo-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v2H3V6zm3 5h12v2H6v-2zm3 5h6v2H9v-2z"/></svg></div>
+    <span class="nav-logo-name">ТелеСервис</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html">Главная</a></li>
+    <li><a href="o-kompanii.html">О компании</a></li>
+    <li><a href="uslugi.html">Услуги</a></li>
+    <li><a href="portfolio.html">Портфолио</a></li>
+    <li><a href="otzyvy.html" class="active">Отзывы</a></li>
+  </ul>
+  <a href="index.html#contact" class="nav-cta">Оставить заявку</a>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html">Главная</a>
+      <span>›</span>
+      <span style="color:rgba(255,255,255,.8)">Отзывы</span>
+    </div>
+    <h1>Отзывы клиентов</h1>
+    <p>Нам доверяют предприниматели, организации и частные лица Багаевского района и всей Ростовской области.</p>
+  </div>
+</div>
+
+<!-- RATING SUMMARY -->
+<div class="rating-bar">
+  <div class="rating-inner">
+    <div class="rating-big fade-up">
+      <div class="rating-num">4.9</div>
+      <div class="rating-stars-big">★★★★★</div>
+      <div class="rating-count">на основе 24 отзывов</div>
+    </div>
+    <div class="rating-bars fade-up">
+      <div class="rating-bar-row">
+        <span>5 ★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:88%"></div></div>
+        <span>21</span>
+      </div>
+      <div class="rating-bar-row">
+        <span>4 ★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:8%"></div></div>
+        <span>2</span>
+      </div>
+      <div class="rating-bar-row">
+        <span>3 ★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:4%"></div></div>
+        <span>1</span>
+      </div>
+      <div class="rating-bar-row">
+        <span>2 ★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+        <span>0</span>
+      </div>
+      <div class="rating-bar-row">
+        <span>1 ★</span>
+        <div class="rating-bar-track"><div class="rating-bar-fill" style="width:0%"></div></div>
+        <span>0</span>
+      </div>
+    </div>
+    <div class="rating-cta fade-up">
+      <p>Были у нас? Поделитесь<br>своим впечатлением.</p>
+      <a href="#write-review" class="btn-accent">Написать отзыв</a>
+    </div>
+  </div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-bar">
+  <button class="filter-btn active" onclick="filterReviews('all', this)">Все отзывы</button>
+  <button class="filter-btn" onclick="filterReviews('network', this)">Сетевое оборудование</button>
+  <button class="filter-btn" onclick="filterReviews('cctv', this)">Видеонаблюдение</button>
+  <button class="filter-btn" onclick="filterReviews('pbx', this)">АТС и телефония</button>
+  <button class="filter-btn" onclick="filterReviews('cabling', this)">СКС</button>
+  <button class="filter-btn" onclick="filterReviews('antenna', this)">Антенны</button>
+</div>
+
+<!-- REVIEWS GRID -->
+<section>
+  <div class="container">
+    <div class="reviews-grid" id="reviews-grid">
+
+      <div class="review-card fade-up" data-cat="network">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">Сеть</span>
+        </div>
+        <p class="review-text">«Быстро приехали, настроили роутер и Wi-Fi на складе. Работает стабильно уже полгода. Приехали прямо на следующий день после заявки. Рекомендую всем.»</p>
+        <div class="review-author">
+          <div class="review-avatar">АС</div>
+          <div><div class="review-name">Алексей С.</div><div class="review-meta">ООО «АгроТех» · март 2025</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="pbx">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">АТС</span>
+        </div>
+        <p class="review-text">«Обращались по поводу АТС в офисе. Всё сделали аккуратно, дали гарантию, объяснили как пользоваться. Цена адекватная, работой довольны.»</p>
+        <div class="review-author">
+          <div class="review-avatar">МК</div>
+          <div><div class="review-name">Марина К.</div><div class="review-meta">Частный клиент · январь 2025</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="cctv">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">Видеонаблюдение</span>
+        </div>
+        <p class="review-text">«Поставили видеонаблюдение в магазине. Сделали всё за один день, вывели изображение на телефон. Очень удобно, теперь слежу за торговым залом из дома.»</p>
+        <div class="review-author">
+          <div class="review-avatar">ИП</div>
+          <div><div class="review-name">ИП Петров Д.В.</div><div class="review-meta">Розничная торговля · ноябрь 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="network">
+        <div class="review-header">
+          <div class="review-stars">★★★★☆</div>
+          <span class="review-category">Сеть</span>
+        </div>
+        <p class="review-text">«Ремонт коммутатора Cisco сделали за два дня. Диагностика бесплатно, как и обещали. Немного дольше, чем ожидала, но результатом осталась довольна.»</p>
+        <div class="review-author">
+          <div class="review-avatar">ЕВ</div>
+          <div><div class="review-name">Елена В.</div><div class="review-meta">Администрация района · октябрь 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="cabling">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">СКС</span>
+        </div>
+        <p class="review-text">«Провели СКС в новом офисе. Всё аккуратно, маркировка, схема на руках. Кабели уложены в кабель-каналы, ничего не торчит. Приедут если что — это важно.»</p>
+        <div class="review-author">
+          <div class="review-avatar">СН</div>
+          <div><div class="review-name">Сергей Н.</div><div class="review-meta">ООО «СтройГрупп» · сентябрь 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="antenna">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">Антенны</span>
+        </div>
+        <p class="review-text">«Антенна для интернета на ферме. Вроде безнадёжное место — но сделали, всё работает. Теперь есть нормальный интернет прямо в поле. Молодцы, серьёзные ребята.»</p>
+        <div class="review-author">
+          <div class="review-avatar">ВД</div>
+          <div><div class="review-name">Василий Д.</div><div class="review-meta">Фермерское хозяйство · август 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="cctv">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">Видеонаблюдение</span>
+        </div>
+        <p class="review-text">«Установили камеры на складе и у входа. Всё подключено к регистратору, настроен удалённый просмотр. Объяснили как пользоваться — понятно даже мне.»</p>
+        <div class="review-author">
+          <div class="review-avatar">НП</div>
+          <div><div class="review-name">Николай П.</div><div class="review-meta">Оптовая торговля · июль 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="network">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">Сеть</span>
+        </div>
+        <p class="review-text">«Настроили корпоративную Wi-Fi сеть в школе. Везде стабильный сигнал, раньше в некоторых классах интернета вообще не было. Сделали быстро и без лишних вопросов.»</p>
+        <div class="review-author">
+          <div class="review-avatar">ТМ</div>
+          <div><div class="review-name">Татьяна М.</div><div class="review-meta">МБОУ СОШ · июнь 2024</div></div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up" data-cat="pbx">
+        <div class="review-header">
+          <div class="review-stars">★★★★★</div>
+          <span class="review-category">АТС</span>
+        </div>
+        <p class="review-text">«Настройка IP-телефонии для нашего офиса. Теперь все звонки идут через интернет, расходы на связь заметно упали. Работает без сбоев уже несколько месяцев.»</p>
+        <div class="review-author">
+          <div class="review-avatar">ОК</div>
+          <div><div class="review-name">Олег К.</div><div class="review-meta">ООО «Агросервис» · май 2024</div></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WRITE REVIEW FORM -->
+<div class="write-section" id="write-review">
+  <div class="write-box fade-up">
+    <h2>Оставить отзыв</h2>
+    <p>Расскажите о своём опыте работы с ТелеСервис — ваше мнение поможет другим клиентам.</p>
+
+    <label style="display:block;font-size:13px;font-weight:500;color:var(--c-muted);margin-bottom:8px;">Ваша оценка *</label>
+    <div class="star-select" id="star-select">
+      <span class="star-btn" data-val="1" onclick="setStar(1)">★</span>
+      <span class="star-btn" data-val="2" onclick="setStar(2)">★</span>
+      <span class="star-btn" data-val="3" onclick="setStar(3)">★</span>
+      <span class="star-btn" data-val="4" onclick="setStar(4)">★</span>
+      <span class="star-btn" data-val="5" onclick="setStar(5)">★</span>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group"><label>Ваше имя *</label><input type="text" id="r-name" placeholder="Иван Петров"></div>
+      <div class="form-group"><label>Организация</label><input type="text" id="r-org" placeholder="ООО «Компания» или частное лицо"></div>
+    </div>
+    <div class="form-group">
+      <label>Тип услуги *</label>
+      <select id="r-service">
+        <option value="">— Выберите —</option>
+        <option>Ремонт сетевого оборудования</option>
+        <option>Настройка АТС / IP-телефонии</option>
+        <option>Монтаж СКС</option>
+        <option>Обслуживание антенных систем</option>
+        <option>Видеонаблюдение</option>
+        <option>Серверное оборудование</option>
+        <option>Другое</option>
+      </select>
+    </div>
+    <div class="form-group"><label>Ваш отзыв *</label><textarea id="r-text" placeholder="Расскажите о вашем опыте..."></textarea></div>
+    <button class="form-submit" id="r-submit" onclick="submitReview()">Отправить отзыв</button>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <h3>ТелеСервис</h3>
+      <p>Профессиональный сервис по ремонту, обслуживанию и наладке телекоммуникационного оборудования. Работаем в Багаевском районе и по всей Ростовской области с 2006 года.</p>
+      <p style="margin-top:.75rem;">ОГРНИП: 306610332400018 · ИНН: 610302683973</p>
+    </div>
+    <div class="footer-col">
+      <h4>Услуги</h4>
+      <a href="uslugi.html">Сетевое оборудование</a>
+      <a href="uslugi.html">Антенные системы</a>
+      <a href="uslugi.html">АТС и телефония</a>
+      <a href="uslugi.html">Видеонаблюдение</a>
+      <a href="uslugi.html">СКС</a>
+    </div>
+    <div class="footer-col">
+      <h4>Компания</h4>
+      <a href="o-kompanii.html">О нас</a>
+      <a href="portfolio.html">Портфолио</a>
+      <a href="otzyvy.html">Отзывы</a>
+      <a href="index.html#contact">Контакты</a>
+    </div>
+    <div class="footer-col">
+      <h4>Контакты</h4>
+      <a href="tel:+78633082458">+7 (863) 308-24-58</a>
+      <a href="mailto:andrey.gorkovenko@gmail.com">andrey.gorkovenko@gmail.com</a>
+      <a href="#">346610, Ростовская обл.,<br>ст. Багаевская, ул. Пугачева, 9/7</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© 2026 ТелеСервис. Все права защищены.</div>
+</footer>
+
+<div class="modal-overlay" id="modal-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <div class="modal-icon" id="modal-icon">✅</div>
+    <h3 id="modal-title">Спасибо за отзыв!</h3>
+    <p id="modal-text">Ваш отзыв отправлен на модерацию.</p>
+    <button class="modal-close" onclick="document.getElementById('modal-overlay').classList.remove('open')">Хорошо</button>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://ВАШ_ПРОЕКТ.supabase.co';
+const SUPABASE_KEY = 'ВАШ_ANON_KEY';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// Star rating
+let selectedStars = 0;
+function setStar(val) {
+  selectedStars = val;
+  document.querySelectorAll('.star-btn').forEach((btn, i) => {
+    btn.classList.toggle('active', i < val);
+  });
+}
+
+// Filter reviews
+function filterReviews(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.review-card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// Submit review
+async function submitReview() {
+  const name    = document.getElementById('r-name').value.trim();
+  const org     = document.getElementById('r-org').value.trim();
+  const service = document.getElementById('r-service').value;
+  const text    = document.getElementById('r-text').value.trim();
+  let ok = true;
+
+  ['r-name','r-service','r-text'].forEach(id => document.getElementById(id).classList.remove('error'));
+
+  if(name.length < 2)   { document.getElementById('r-name').classList.add('error');    ok = false; }
+  if(!service)           { document.getElementById('r-service').classList.add('error'); ok = false; }
+  if(text.length < 10)  { document.getElementById('r-text').classList.add('error');    ok = false; }
+  if(selectedStars === 0){ alert('Пожалуйста, выберите оценку.'); ok = false; }
+  if(!ok) return;
+
+  const btn = document.getElementById('r-submit');
+  btn.disabled = true; btn.textContent = 'Отправляем...';
+
+  try {
+    await db.from('reviews').insert([{
+      name, org, service, text,
+      rating: selectedStars,
+      status: 'На модерации',
+      created_at: new Date().toISOString()
+    }]);
+  } catch(e) {}
+
+  document.getElementById('r-name').value = '';
+  document.getElementById('r-org').value  = '';
+  document.getElementById('r-service').value = '';
+  document.getElementById('r-text').value = '';
+  setStar(0);
+
+  document.getElementById('modal-icon').textContent  = '✅';
+  document.getElementById('modal-title').textContent = 'Спасибо за отзыв!';
+  document.getElementById('modal-text').textContent  = 'Ваш отзыв отправлен на модерацию и появится на сайте в ближайшее время.';
+  document.getElementById('modal-overlay').classList.add('open');
+
+  btn.disabled = false; btn.textContent = 'Отправить отзыв';
+}
+
+// Scroll animations
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('visible'); obs.unobserve(e.target); } });
+}, { threshold: .15 });
+document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
